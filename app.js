@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 3001;
-// const db = require('./quries.js');
+const db = require('./queries.js');
 
 app.use(express.json());
 
@@ -19,4 +19,7 @@ app.get('/', (request, response) => {
     response.send('Welcome to E-Commerce');
 });
 
+
+// Lista taskova
+app.get('/tasks/:userID/:asc/:requester', db.getUserTasks);
 
