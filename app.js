@@ -13,13 +13,17 @@ app.listen(PORT, () => {
     console.log(`Server listening on PORT: ${PORT}`);
 });
 
-// ROUTES
+// ROUTES   
 // Homepage
 app.get('/', (request, response) => {
     response.send('Welcome to E-Commerce');
 });
 
-
 // Lista taskova
 app.get('/tasks/:userID/:asc/:requester', db.getUserTasks);
+
+// Kreiranje taskova
+app.post('/tasks/:userID', db.createTask);
+
+app.put('tasks/:userID/:id', db.updateTask);
 
