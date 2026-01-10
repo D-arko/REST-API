@@ -58,17 +58,17 @@ const createTask = (request, response) => {
 };
 
 const updateTask = (request, response) => {
-    const userID = request.params.userID;
+    // const userID = request.params.userID;
     const id = request.params.id;
     const { body } = request.body;
     
-    pool.query('UPDATE "Task" SET "body"=$1 WHERE "id"=$2 RETURNING *;',
+    pool.query('UPDATE "Task" SET "body"=$2 WHERE "id"=$1 RETURNING *;',
         [ id, body ], (error, results) => {
 
             if (error) {
                 throw error;
             } else {
-                response.status(201).json(results.rows);
+                response.status(200).json(results.rows);
             }
         }
     );
