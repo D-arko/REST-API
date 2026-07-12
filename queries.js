@@ -8,17 +8,16 @@ const pool = new Pool({
     port: 5432
 });
 
-
 // Svi taskovi zadatog usera
 const getUserTasks = (request, response) => {
-    const { userID, asc, requester } = request.params;
+    const { userID, sort, requester } = request.params;
     let query = '';
     
     if (requester != userID) {
         response.status(403).send('Not authorized to view these tasks.');
     }
 
-    if (asc == 'desc') {
+    if (sort.toUpperCase() == 'DESC') {
         query = `SELECT * FROM "Task" WHERE "userID" = ${userID} ORDER BY id DESC`;
     }
     else {

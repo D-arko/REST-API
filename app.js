@@ -20,7 +20,7 @@ app.get('/', (request, response) => {
 });
 
 // Lista taskova
-app.get('/tasks/:userID/:asc/:requester', db.getUserTasks);
+app.get('/tasks/:userID/:sort/:requester', db.getUserTasks);
 
 // Kreiranje taskova
 app.post('/tasks/:userID', db.createTask);
