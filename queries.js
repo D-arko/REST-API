@@ -40,12 +40,13 @@ const createTask = (request, response) => {
     const requester = request.params.requester;
     const { body } = request.body;
 
+    if (requester != userID) {
+        response.status(403).send('Can only create your own tasks.');
+    }
+
     pool.query('INSERT INTO "Task" ("userID", "body") VALUES ($1, $2) RETURNING *;', 
         [ userID, body ], (error, results) => {
         
-            if (requester != userID) {
-                response.status(403).send('Can only create your own tasks.');
-            }
              if (error) {
                 throw error;
             } else {
@@ -57,13 +58,39 @@ const createTask = (request, response) => {
 };
 
 const updateTask = (request, response) => {
-    // const userID = request.params.userID;
     const id = request.params.id;
     const { body } = request.body;
+    const requester = request.params.requester;
     
+    pool.query('SELECT 1 FROM "Task" WHERE id=$1;',
+        [ id ], (error, results) => {
+            console.log(`results.rows.length=${results.rows.length}`)
+            if (results.rows.length === 0) {
+                return response.status(404).json(`Task ${id} does not exist.`);
+            }
+            
+            if (error) {
+                throw error;
+            }
+        }
+
+    )
+
+    pool.query('SELECT "userID" FROM "Task" WHERE id=$1;',
+        [ id ], (error, results) => {
+
+            if (requester != id) {
+                response.status(403).json('Not authorized to change this task.')
+            }
+            
+            if (error) {
+                throw error;
+            }         
+        }
+    )
+
     pool.query('UPDATE "Task" SET "body"=$2 WHERE "id"=$1 RETURNING *;',
         [ id, body ], (error, results) => {
-
             if (error) {
                 throw error;
             } else {

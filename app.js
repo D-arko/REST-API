@@ -25,5 +25,6 @@ app.get('/tasks/:userID/:sort/:requester', db.getUserTasks);
 // Kreiranje taskova
 app.post('/tasks/:userID/:requester', db.createTask);
 
-app.put('/tasks/:id', db.updateTask);
+// Izmena taskova
+app.put('/tasks/:id/:requester', db.updateTask);
 
