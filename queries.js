@@ -37,15 +37,15 @@ const getUserTasks = (request, response) => {
 
 const createTask = (request, response) => {
     const userID = request.params.userID;
+    const requester = request.params.requester;
     const { body } = request.body;
 
     pool.query('INSERT INTO "Task" ("userID", "body") VALUES ($1, $2) RETURNING *;', 
         [ userID, body ], (error, results) => {
         
-            // if (requester != userID) {
-            //     response.status(403).send('Not authorized to create tasks.');
-            // }
-            
+            if (requester != userID) {
+                response.status(403).send('Can only create your own tasks.');
+            }
              if (error) {
                 throw error;
             } else {
